@@ -1,13 +1,21 @@
-# [Nombre del Proyecto / Sistema]
-> **Asignatura:** Electrónica Digital [II / III] - Universidad Nacional de Córdoba
-> **Integrantes:** > * Nombre Apellido
-> * Nombre Apellido
-> **Profesor:** [Nombre del Profesor]
+# Detector de Color con TCS230 y PIC16F887
+
+> **Asignatura:** Electrónica Digital II - Universidad Nacional de Córdoba
+>
+> **Integrantes:** 
+  * Osses, Santiago
+  * Soria, Enzo
+  * Rojas, Facundo
+> 
+> **Profesor:** Blasco, Marcos Javier.
 
 ---
 
-## 🚀 1. Descripción General del Proyecto (Común a DII y DIII)
-Expliquen, en un máximo de dos párrafos, **qué hace el sistema, qué problema resuelve y a quién va dirigido**. Sean claros, concisos y directos.
+## 🚀 1. Descripción General del Proyecto
+
+El sistema detecta el color de un objeto usando el sensor TCS230 y lo muestra en un display LCD 16x2. El sensor entrega una señal de frecuencia proporcional a la intensidad del color percibido; esa frecuencia se convierte a tensión mediante un circuito externo y se mide con el ADC interno del PIC16F887. El usuario habilita el sensado con un botón, y un servomotor actúa como indicador visual del color detectado, moviéndose a distintas posiciones angulares según el resultado.
+
+El proyecto resuelve una necesidad concreta de clasificación cromática en tiempo real, con una interfaz completamente autónoma: sin PC, sin software adicional, con salida tanto textual (LCD) como mecánica (servo).
 
 ### 🎯 Alcances del Proyecto (¿Qué hace y qué NO hace el sistema?)
 Delimiten claramente los objetivos alcanzados para la entrega final:
