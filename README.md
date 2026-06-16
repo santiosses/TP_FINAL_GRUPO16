@@ -1,102 +1,107 @@
-# Detector de Color con TCS230 y PIC16F887
+markdown_content = """# Sistema Clasificador e Indicador de Color
 
 > **Asignatura:** Electrónica Digital II - Universidad Nacional de Córdoba
->
 > **Integrantes:** 
-  * Osses, Santiago
-  * Soria, Enzo
-  * Rojas, Facundo
-> 
-> **Profesor:** Blasco, Marcos Javier.
 
 ---
 
-## 🚀 1. Descripción General del Proyecto
+## 1. Descripción General del Proyecto
 
-El sistema detecta el color de un objeto usando el sensor TCS230 y lo muestra en un display LCD 16x2. El sensor entrega una señal de frecuencia proporcional a la intensidad del color percibido; esa frecuencia se convierte a tensión mediante un circuito externo y se mide con el ADC interno del PIC16F887. El usuario habilita el sensado con un botón, y un servomotor actúa como indicador visual del color detectado, moviéndose a distintas posiciones angulares según el resultado.
+El presente proyecto consiste en el diseño e implementación de un sistema clasificador de colores basado en microcontrolador. El objetivo principal es detectar el color de un objeto expuesto al sensor y comunicarlo de múltiples formas para garantizar una lectura clara del entorno. El sistema está pensado para aplicaciones industriales a escala, procesos de selección de materiales o fines didácticos, resolviendo la necesidad de automatizar el reconocimiento visual de piezas.
 
-El proyecto resuelve una necesidad concreta de clasificación cromática en tiempo real, con una interfaz completamente autónoma: sin PC, sin software adicional, con salida tanto textual (LCD) como mecánica (servo).
+Para su funcionamiento, el sistema se mantiene a la espera de una señal de inicio generada por un pulsador. Una vez activado, el sensor óptico realiza la lectura, el microcontrolador procesa la señal y expone el resultado en una pantalla LCD local, transmite el dato hacia una computadora mediante comunicación serie (USB-UART) y posiciona un servomotor en un ángulo específico, funcionando como un indicador analógico tipo tacómetro. Adicionalmente, se integra la lectura de un potenciómetro a través del conversor analógico-digital (ADC) como requerimiento funcional de la etapa de acondicionamiento de señales.
 
-### 🎯 Alcances del Proyecto (¿Qué hace y qué NO hace el sistema?)
-Delimiten claramente los objetivos alcanzados para la entrega final:
-* **El sistema SÍ es capaz de:** [Ej: Medir temperatura y presión en tiempo real, activar un cooler si se supera el umbral y transmitir los datos por UART cada 1 segundo].
-* **El sistema NO incluye (Fuera de alcance):** [Ej: Almacenamiento local de datos (Data Logging) en tarjeta SD ni conectividad inalámbrica Wi-Fi/Bluetooth].
+### Alcances del Proyecto
 
-### ⏩ Posibles Etapas Siguientes (Líneas Futuras)
-Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito profesional:
-* [Ej: Migrar el circuito de protoboard a un circuito impreso (PCB) diseñado bajo normas de compatibilidad electromagnética (EMC)].
-* [Ej: Implementar modos de bajo consumo (Sleep) administrados por hardware para permitir el uso de baterías].
-* [Ej: Diseñar una interfaz gráfica (GUI) en Python o una app móvil para la visualización remota de las variables].
+* **El sistema SÍ es capaz de:**
+  * Iniciar el proceso de sensado únicamente bajo demanda del usuario mediante una interrupción o lectura de un botón físico.
+  * Identificar colores utilizando el módulo sensor TCS230 / TCS3200.
+  * Transmitir el color detectado en tiempo real a una terminal de PC mediante el protocolo UART.
+  * Mostrar la información de manera local en un display alfanumérico LCD 16x2.
+  * Posicionar un servomotor en ángulos predeterminados según el color detectado.
+  * Adquirir e interpretar variaciones de tensión analógica provenientes de un potenciómetro externo.
 
----
+* **El sistema NO incluye:**
+  * Almacenamiento local de datos (Data Logging) en memorias EEPROM externas o tarjetas SD.
+  * Conectividad inalámbrica (Wi-Fi o Bluetooth).
+  * Control de velocidad dinámico sobre cintas transportadoras reales.
 
-## 📐 2. Arquitectura del Sistema: Hardware y Software (Común)
+### Posibles Etapas Siguientes
 
-### 🔌 Hardware & Interconexión
-* **Diagrama de Bloques:** [Insertar imagen o link al diagrama de bloques del hardware]
-* **Esquemático del Circuito:** *[Inserte aquí la captura de imagen/render del esquemático completo desarrollado en KiCad/Altium]*
-  `![Esquemático Completo](hardware/esquematico.png)`
-* **Descripción del Circuito y Consideraciones de Diseño:** Breve explicación de las etapas (ej: acoplamiento de señales, protecciones inductivas, filtrado, etc.).
-
-### 💻 Arquitectura de Software (Firmware)
-* **Diagrama de Flujo o Máquina de Estados:** *[Inserte aquí la imagen del diagrama que explique el lazo principal o el comportamiento del sistema]*
-  `![Diagrama de Flujo / Máquina de Estados](docs/diagrama_software.png)`
+* Migrar el circuito de simulación y protoboard a un circuito impreso (PCB) diseñado bajo normas de ruteo para señales mixtas.
+* Desarrollar una interfaz gráfica (GUI) en Python para la computadora, reemplazando la terminal de texto genérica por un panel de control interactivo.
+* Incorporar una rutina de calibración automática inicial para compensar las condiciones de iluminación del entorno.
 
 ---
 
-## ⚡ 3. Especificaciones Eléctricas, Alimentación y Entorno (Específico por Asignatura)
+## 2. Arquitectura del Sistema: Hardware y Software
 
-### 🔌 Parámetros de Alimentación y Consumo (Común a ambas materias)
-* **Tensión de operación del sistema:** [Ej: 5V / 3.3V]
-* **Método de alimentación:** [Ej: Fuente externa de 12V con regulador lineal LM7805 / Alimentación por USB]
-* **Consumo estimado o medido:** * En modo activo (máxima carga, relés/motores encendidos): `XX mA`
-  * En modo bajo consumo (si aplica): `XX uA`
+### Hardware e Interconexión
 
-### 📌 [OPCIÓN A: Solo para alumnos de Electrónica Digital II (PIC16F887)]
-* **Herramientas de Software:** MPLAB X IDE [vX.XX] y compilador XC8 [vX.XX].
-* **Hardware de Programación/Depuración:** [Ej: PICkit 3, PICkit 4].
+* **Microcontrolador Central:** Microchip PIC16F887.
+* **Sensor de Color:** Módulo TCS230 / TCS3200 acoplado a los pines digitales para la lectura de frecuencia.
+* **Interfaz de Usuario (Local):** Display LCD 16x2 (LM016L) manejado mediante un bus de datos paralelo.
+* **Actuador Indicador:** Servomotor controlado por señal PWM.
+* **Entradas de Control:** Pulsadores con resistencias pull-up/pull-down para el inicio de sensado y reset del sistema (MCLR). Potenciómetro de 10k conectado a un canal analógico (AN).
+* **Comunicación:** Interfaz UART conectada a pines de transmisión y recepción (TX/RX) para el enlace con la PC.
+
+### Arquitectura de Software (Firmware)
+
+El firmware fue estructurado bajo un modelo de lazo de control principal (Super Loop) asistido por interrupciones. El flujo general es el siguiente:
+1. Inicialización de puertos, periféricos (ADC, PWM, UART) y pantalla LCD.
+2. Estado de reposo esperando el flanco de activación en el botón de inicio.
+3. Al detectarse el pulso, se activa la lectura secuencial de los fotodiodos del sensor (rojo, verde, azul).
+4. Se realiza la conversión ADC del potenciómetro.
+5. Se procesan los datos para determinar el color predominante.
+6. Se formatea la cadena de caracteres y se envía por el puerto serie.
+7. Se actualiza el buffer del display LCD.
+8. Se ajusta el ciclo de trabajo (Duty Cycle) del PWM para rotar el servomotor al ángulo correspondiente.
+
+---
+
+## 3. Especificaciones Eléctricas, Alimentación y Entorno
+
+### Parámetros de Alimentación
+
+* **Tensión de operación del sistema:** 5V DC.
+* **Método de alimentación:** Regulador lineal o alimentación directa desde el puerto USB de la computadora.
+* **Señal de Reloj:** Oscilador de cristal externo.
+
+### Entorno de Desarrollo (Electrónica Digital II)
+
+* **Herramientas de Software:** MPLAB X IDE y compilador XC8. Simulación en Proteus.
 * **Configuración de Bits (Fuses Críticos):**
-  * *Oscilador:* [Ej: HS (Cristal externo de 20MHz) / INTRC (Interno 4MHz)]
-  * *Watchdog Timer (WDT):* [Ej: ON / OFF]
-  * *Master Clear (MCLRE):* [Ej: ON (Pin externo) / OFF (Digital IO)]
-* **Periféricos Internos Utilizados:** [Ej: Timer0, ADC, EUSART, PWM].
-* **Gestión de Interrupciones:** Al contar con un único vector de interrupción, expliquen la prioridad por software (*polling*) en la ISR: ¿Qué bandera (`flag`) evalúan primero y por qué?
-
-### 📌 [OPCIÓN B: Solo para alumnos de Electrónica Digital III (Cortex-M / ARM)]
-* **IDE y SDK:** [Ej: MCUXpresso IDE v11.8 con LPCOpen v2.10 / STM32CubeIDE v1.14 con HAL v1.28].
-* **Microcontrolador Principal:** [Ej: NXP LPC1769 / STM32F411].
-* **Bibliotecas de Terceros y Versiones:** [Ej: FreeRTOS v10.5.1 / Biblioteca LCD I2C v1.2].
-* **Periféricos Avanzados Utilizados:** [Ej: NVIC, DMA, SysTick, DAC].
-* **Estrategia de Concurrencia:** Expliquen la arquitectura elegida: [Ej: Bare-metal con máquina de estados cooperativa / RTOS (FreeRTOS) detallando las tareas creadas y sus prioridades].
+  * *Oscilador:* HS (Cristal externo).
+  * *Watchdog Timer (WDT):* OFF.
+  * *Master Clear (MCLRE):* ON (Vinculado a botón de reset en pin RE3).
+* **Periféricos Internos Utilizados:**
+  * Módulo ADC: Para la lectura del potenciómetro.
+  * Módulo EUSART: Para la transmisión de datos a la computadora.
+  * Módulo CCP (PWM): Para la generación de la señal de control del servomotor.
+  * Timers: Para la lectura de la frecuencia proveniente del sensor TCS3200 y la temporización general.
 
 ---
 
-## 🔄 4. Proceso de Integración y Desarrollo (Común)
-Describan cronológicamente cómo fueron sumando y testeando las diferentes partes del proyecto (enfoque modular de ingeniería).
+## 4. Proceso de Integración y Desarrollo
 
-* **Etapa 1 (Validación inicial):** [Ej: Configuración del oscilador/reloj y parpadeo de LED de estado].
-* **Etapa 2 (Adquisición/Comunicación):** [Ej: Implementación del ADC y envío de tramas crudas por UART].
-* **Etapa 3 (Integración lógica):** [Ej: Procesamiento de datos, lógica de control o montado sobre el RTOS].
-* **Etapa 4 (Sistema Completo):** [Ej: Acople de actuadores finales, calibración y pruebas de estrés].
+El proyecto se desarrolló siguiendo un enfoque modular, validando cada subsistema por separado antes de la integración final:
 
----
-
-## 📊 5. Ensayos, Pruebas y Resultados (Común)
-Demuestren con datos empíricos que el sistema funciona correctamente. **Es obligatorio incluir registro visual**.
-
-* **Pruebas Funcionales Realizadas:** Detallen los ensayos (Ej: "Se inyectó una señal controlada para medir la precisión del ADC...").
-* **Evidencia Fotográfica y Gráficos:** * *Capturas de instrumental:* [Insertar capturas de Osciloscopio, Analizador Lógico o Terminal Serie]
-  * *Foto del Prototipo Real:* [Insertar foto del hardware final cableado/armado en funcionamiento]
+* **Etapa 1 (Control Base):** Configuración del oscilador, pines de entrada/salida y validación de retardos. 
+* **Etapa 2 (Visualización):** Implementación de la librería del LCD 16x2 y pruebas de impresión de caracteres.
+* **Etapa 3 (Adquisición Analógica):** Configuración del módulo ADC, lectura del potenciómetro y mapeo de variables.
+* **Etapa 4 (Comunicación):** Configuración del módulo EUSART y envío de cadenas de texto hacia la terminal virtual.
+* **Etapa 5 (Actuación):** Generación de la señal PWM y caracterización de los ángulos del servomotor según el ancho de pulso.
+* **Etapa 6 (Sensor e Integración Final):** Incorporación del algoritmo de lectura del sensor TCS3200, lógica de decisión de color e integración de todos los periféricos activados mediante el botón de inicio.
 
 ---
 
-## 📂 6. Estructura del Repositorio (Común)
-El repositorio debe mantener obligatoriamente la siguiente estructura limpia (¡Recuerden configurar correctamente el `.gitignore` para no subir carpetas temporales como `Debug/`, `Release/` o archivos `.p1` / `.d`!).
+## 5. Ensayos, Pruebas y Resultados
 
-```text
-├── firmware/          # Código fuente del proyecto (MPLABX / MCUXpresso / STM32Cube)
-│   ├── src/           # Archivos de código (.c)
-│   └── inc/           # Archivos de cabecera (.h)
-├── hardware/          # Archivos de diseño (KiCad/Altium), esquemáticos en PDF/Imagen y BOM
-├── docs/              # Datasheets clave, imágenes del README, notas de aplicación
-└── README.md          # Este archivo de presentación
+El sistema fue sometido a pruebas exhaustivas en entornos de simulación (Proteus) para verificar el correcto flujo de las señales antes del montaje físico.
+
+* **Validación de Señales:** Se utilizó instrumentación virtual (osciloscopio) para corroborar la correcta forma de onda de la señal PWM entregada al servomotor y las tramas de datos digitales enviadas por el pin TX del UART.
+* **Interacción Dinámica:** Se comprobó que el sistema permanece en reposo absoluto hasta recibir el estímulo del botón principal, tras lo cual la terminal serie y el LCD reflejan sincrónicamente la información del color emulado.
+
+---
+
+## 6. Estructura del Repositorio
